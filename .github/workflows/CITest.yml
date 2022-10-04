@@ -16,9 +16,14 @@ jobs:
         id: check
         run: find . -maxdepth 1 -type d -not -path './.*'  -not -path '.' '!' -exec test -e "{}/ext-mappings" ';' -print | grep . && exit 1 || exit 0
         continue-on-error: true
-      - name: Success
-        if: ${{ steps.detect.outcome }} == 'success' && ${{ steps.check.outcome }} == 'success'
-        run: echo "Test succeeded!"; exit 0
-      - name: Check on failures
-        if: ${{ steps.detect.outcome }} != 'success' || ${{ steps.check.outcome }} != 'success'
-        run: exit 1
+      - name: Test
+        if: always()
+        run: 
+          if ${{ steps.detect.outcome }} == 'success' && ${{ steps.check.outcome }} == 'success'; then
+            echo "Test succeeded!"
+            exit 0
+          else
+            echo "Test failed!"
+            exit 1
+          fi
+      
