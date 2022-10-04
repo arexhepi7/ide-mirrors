@@ -20,5 +20,5 @@ jobs:
         if: ${{ steps.detect.outcome }} == 'success' && ${{ steps.check.outcome }} == 'success'
         run: echo "Test succeeded!"; exit 0
       - name: Check on failures
-        if: ${{ steps.detect.outcome }} == 'failure' || ${{ steps.check.outcome }} == 'failure'
+        if: ${{ steps.detect.outcome }} != 'success' || ${{ steps.check.outcome }} != 'success'
         run: exit 1
